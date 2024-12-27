@@ -54,7 +54,7 @@ Check out [Next.js deployment documentation](https://nextjs.org/docs/deployment)
 NOTE: Only run this once, when creating a new agent.
 
 ```bash
-make-agent register https://bitte-aave-agent.vercel.app
+make-agent register -u https://bitte-aave-agent.vercel.app
 ```
 
 ### Agent redeployment
