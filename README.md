@@ -6,14 +6,14 @@ Agent with access to the Aave platform, capable of providing information on pool
 
 Bitte Aave Agent is a tool that interacts with the Aave protocol.
 
-Built using Next.js 14 + Shadcn/ui + Hono (using FastNear, NearSocial) + Zod + Swagger UI.
+Built using Next.js 14 + Shadcn/ui + Hono + Zod + Swagger UI.
 
 ## Backlog
 
-- [ ] Has access to aave platform, can give you info:
+- [x] Has access to aave platform, can give you info:
   - [ ] can offer insights into pools, strategies, rates, and more
 - [ ] Has access to your aave account, can do actions on your behalf:
-  - [ ] can offer insights into your positions, portfolio, and current strategy recommendations
+  - [x] can offer insights into your positions, portfolio, and current strategy recommendations
   - [ ] can facilitate borrowing and lending
 
 ## Project Walkthrough
