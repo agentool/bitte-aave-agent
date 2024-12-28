@@ -1,12 +1,13 @@
 {
   "name": "bitte-aave-agent",
-  "description": "Agent for interacting with the largest DeFi protocols with billions of dollars in weekly volume across 12+ networks.",
+  "description": "Agent that interacts with the Aave protocol.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev:next": "next dev",
     "dev:agent": "pnpm dev:agent-lt",
     "dev:agent-serveo": "make-agent dev -s",
+    "dev:agent2": "make-agent dev -p 3200",
     "dev:agent-lt": "echo 'Password:' && curl ifconfig.me && echo '\n' && make-agent dev",
     "dev:agent-ngrok": "ngrok http 3000",
     "build": "next lint && next build",
@@ -14,6 +15,7 @@
     "deploy": "make-agent deploy -u https://bitte-aave-agent.vercel.app"
   },
   "dependencies": {
+    "@builddao/near-social-js": "^1.1.0",
     "@hono/node-server": "^1.13.7",
     "@hono/zod-openapi": "^0.18.2",
     "@hono/zod-validator": "^0.4.1",
@@ -21,6 +23,7 @@
     "big.js": "^6.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "fuse.js": "^7.0.0",
     "hono": "^4.6.12",
     "lucide-react": "^0.461.0",
     "next": "14.2.3",

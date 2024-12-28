@@ -1,18 +1,24 @@
 # Bitte Aave Agent
 
-Agent for interacting with the largest DeFi protocols with billions of dollars in weekly volume across 12+ networks.
+Agent with access to the Aave platform, capable of providing information on pools, strategies, rates, and more. It can send transactions on your behalf, facilitate borrowing and lending, and offer insights into your positions, portfolio, and current strategy recommendations.
 
 ## Overview
 
-TODO
+Bitte Aave Agent is a tool that interacts with the Aave protocol.
 
-Built using Next.js 14 + Shadcn/ui + Hono + Zod + Swagger UI.
+Built using Next.js 14 + Shadcn/ui + Hono (using FastNear, NearSocial) + Zod + Swagger UI.
 
 ## Backlog
 
-- [ ] TODO
+- [ ] Has access to aave platform, can give you info:
+  - [ ] can offer insights into pools, strategies, rates, and more
+- [ ] Has access to your aave account, can do actions on your behalf:
+  - [ ] can offer insights into your positions, portfolio, and current strategy recommendations
+  - [ ] can facilitate borrowing and lending
 
 ## Project Walkthrough
+
+Bitte Aave Agent facilitates the development of AI-powered tools for evaluating aave account. The template supports creating, managing, and deploying aave functionalities, starting with pool/strategies/rates/ etc.
 
 ### API Base URL
 
@@ -20,7 +26,7 @@ Built using Next.js 14 + Shadcn/ui + Hono + Zod + Swagger UI.
 
 ### Endpoints
 
-- TODO `GET` `/api/...`
+- Aave Account Info `GET` `/api/aave/{account}`
 
 ### Usage
 
