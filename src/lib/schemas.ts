@@ -8,10 +8,10 @@ import { z } from "zod";
 //     ),
 // });
 
-// export const AavePositionSchema = z.object({
-//   poolId: z.string(),
-//   amount: z.string(),
-// });
+export const AavePositionSchema = z.object({
+  poolId: z.string(),
+  amount: z.string(),
+});
 
 // export const AavePositionsResponseSchema = z.object({
 //   positions: z.array(AavePositionSchema),
@@ -67,13 +67,13 @@ export const AaveDailyVolume24hSchema = z.object({
     v1: z.array(ReserveSchema),
     v2: z.array(ReserveSchema),
     stk: z.array(ReserveSchema),
-      asset: z.string(),
-      symbol: z.string(),
-      decimals: z.number(),
-      priceInEth: z.string(),
-      stake: z.number(),
-      redeem: z.number(),
-    })
+    asset: z.string(),
+    symbol: z.string(),
+    decimals: z.number(),
+    priceInEth: z.string(),
+    stake: z.number(),
+    redeem: z.number(),
+  }),
 });
 
 export const AaveRateHistorySchema = z.object({
@@ -86,9 +86,8 @@ export const AaveRateHistorySchema = z.object({
     month: z.number(),
     date: z.number(),
     hours: z.number(),
-  })
+  }),
 });
-
 
 export const AavePlatformInfoResponseSchema = z.object({
   pools: z.array(AavePoolSchema),
@@ -102,7 +101,9 @@ export const ErrorResponseSchema = z.object({
 
 // export type AavePositionsRequestParams = z.infer<typeof AavePositionsRequestParamsSchema>;
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
-// export type Position = z.infer<typeof AavePositionSchema>;
+export type Position = z.infer<typeof AavePositionSchema>;
 export type Pool = z.infer<typeof AavePoolSchema>;
 export type DailyVolume24h = z.infer<typeof AaveDailyVolume24hSchema>;
-export type AavePlatformInfoResponse = z.infer<typeof AavePlatformInfoResponseSchema>;
+export type AavePlatformInfoResponse = z.infer<
+  typeof AavePlatformInfoResponseSchema
+>;
