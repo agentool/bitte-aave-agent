@@ -1,6 +1,6 @@
 # Bitte Aave Agent
 
-Agent with access to the Aave platform, capable of providing information on pools, strategies, rates, and more. It can send transactions on your behalf, facilitate borrowing and lending, and offer insights into your positions, portfolio, and current strategy recommendations.
+Agent with access to the Aave platform, capable of providing information on pools, strategies, rates, and more. It can send transactions on your behalf, facilitate borrowing and lending, and offer insights into your positions, portfolio, and current strategy recommendations. 
 
 ## Overview
 
