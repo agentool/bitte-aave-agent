@@ -6,7 +6,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Bitte Aave Agent",
-  description: "TODO",
+  description:
+    "API with access to the Aave platform, capable of providing information on pools, strategies, rates, and more.",
 };
 
 export default function RootLayout({
