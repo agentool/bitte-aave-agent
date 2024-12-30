@@ -2,8 +2,7 @@ import { UserPosition } from './user-position';
 
 export const getAaveUserPositions = async (userAddress: string): Promise<UserPosition[]> => {
   try {
-    const url = `https://api.thegraph.com/subgraphs/name/aave/protocol-v2`;
-    // const url = `https://api.thegraph.com/subgraphs/id/8wR23o1zkS4gpLqLNU4kG3JHYVucqGyopL5utGxP2q1N`;
+    const url = `https://api.thegraph.com/subgraphs/id/QmdEuhCPTFx5q1Vf7jPQDVGQDpC34KYry82yb3NPc9sK6a`;
 
     const query = `
         {
