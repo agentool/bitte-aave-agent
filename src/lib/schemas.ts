@@ -80,21 +80,40 @@ export const AaveRateHistorySchema = z.object({
   })
 });
 
-export const AavePoolsResponseSchema = z.array(AavePoolSchema);
-export const AaveDailyVolume24hResponseSchema = AaveDailyVolume24hSchema;
-export const AaveRateHistoryResponseSchema = z.array(AaveRateHistorySchema);
+export const UserPositionSchema = z.object({
+  data: z.object({
+    userReserves: z.array(
+      z.object({
+        reserve: z.object({
+          name: z.string().openapi({ example: "Dai Stablecoin" }),
+          symbol: z.string().openapi({ example: "DAI" }),
+          liquidityRate: z.string().openapi({ example: "0.025" }),
+        }),
+        scaledATokenBalance: z.string().openapi({ example: "1000000000000000000000" }),
+        usageAsCollateralEnabledOnUser: z.boolean().openapi({ example: true }),
+        currentVariableDebt: z.string().openapi({ example: "500000000000000000000" }),
+      })
+    ),
+  }),
+});
+
 
 export const ErrorResponseSchema = z.object({
   error: z.string(),
 });
 
-// export type AavePositionsRequestParams = z.infer<typeof AavePositionsRequestParamsSchema>;
+export const AavePoolsResponseSchema = z.array(AavePoolSchema);
+export const AaveDailyVolume24hResponseSchema = AaveDailyVolume24hSchema;
+export const AaveRateHistoryResponseSchema = z.array(AaveRateHistorySchema);
+export const AaveUserPositionsResponseSchema = z.array(UserPositionSchema);
+
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
-// export type Position = z.infer<typeof AavePositionSchema>;
 export type Pool = z.infer<typeof AavePoolSchema>;
 export type DailyVolume24h = z.infer<typeof AaveDailyVolume24hSchema>;
 export type RateHistory = z.infer<typeof AaveRateHistorySchema>;
+export type UserPosition = z.infer<typeof UserPositionSchema>;
 
 export type AavePoolsResponseSchema = z.infer<typeof AavePoolsResponseSchema>;
 export type AaveDailyVolume24hResponseSchema = z.infer<typeof AaveDailyVolume24hResponseSchema>;
 export type AaveRateHistoryResponseSchema = z.infer<typeof AaveRateHistoryResponseSchema>;
+export type AaveUserPositionsResponseSchema = z.infer<typeof AaveUserPositionsResponseSchema>;

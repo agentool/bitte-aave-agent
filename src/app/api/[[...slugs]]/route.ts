@@ -6,10 +6,12 @@ import {
   AavePoolsResponseSchema,
   AaveRateHistoryResponseSchema,
   ErrorResponseSchema,
+  AaveUserPositionsResponseSchema,
 } from "@/lib/schemas";
 import { getAavePools } from '../../../lib/aave-pools';
 import { getAaveDailyVolume24h } from '../../../lib/aave-daily-volume-24h';
 import { getAaveRatesHistory } from '../../../lib/aave-rates-history';
+import { getAaveUserPositions } from '../../../lib/aave-user-positions';
 
 const app = new OpenAPIHono();
 
@@ -125,6 +127,43 @@ const getAaveRatesHistoryRoute = createRoute({
   },
 });
 
+const getAaveUserPositionsRoute = createRoute({
+  operationId: "get-aave-user-positions",
+  description:
+    "Get Aave user positions",
+  method: "get",
+  path: "/api/aave/user-positions",
+  parameters: [
+    {
+      "name": "safeAddress",
+      "in": "query",
+      "description": "The wallet id of the connected user",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+    }
+  ],
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: AaveUserPositionsResponseSchema,
+        },
+      },
+      description: "User positions in Aave protocol",
+    },
+    400: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Bad request",
+    },
+  },
+});
+
 app.openapi(getAavePoolsRoute, async (c) => {
   const aavePools = await getAavePools();
   return c.json(aavePools, 200);
@@ -139,6 +178,12 @@ app.openapi(getAaveRatesHistoryRoute, async (c) => {
   const { reserveId, from, resolutionInHours } = c.req.query();
   const ratesHistory = await getAaveRatesHistory(reserveId, +from, +resolutionInHours);
   return c.json(ratesHistory, 200);
+});
+
+app.openapi(getAaveUserPositionsRoute, async (c) => {
+  const { safeAddress } = c.req.query();
+  const userPositions = await getAaveUserPositions(safeAddress);
+  return c.json(userPositions, 200);
 });
 
 const key = JSON.parse(process.env.BITTE_KEY || "{}");
