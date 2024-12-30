@@ -1,22 +1,5 @@
 import { z } from "zod";
 
-// export const AavePositionsRequestParamsSchema = z.object({
-//   account: z
-//     .string()
-//     .describe(
-//       "The identifier for the account to get aave positions"
-//     ),
-// });
-
-export const AavePositionSchema = z.object({
-  poolId: z.string(),
-  amount: z.string(),
-});
-
-// export const AavePositionsResponseSchema = z.object({
-//   positions: z.array(AavePositionSchema),
-// });
-
 export const AavePoolSchema = z.object({
   liquidity: z.object({
     usd: z.number(),
@@ -27,11 +10,19 @@ export const AavePoolSchema = z.object({
     eth: z.number(),
     usd: z.number(),
   }),
-  address: z.string(),
+  address: z.string().describe("The address of the pool").openapi({
+    example: "0x1234567890abcdef1234567890abcdef12345678",
+  }),
   apy: z.number(),
-  name: z.string(),
-  symbol: z.string(),
-  updatedAt: z.string().datetime(),
+  name: z.string().openapi({
+    example: "Staked Aave Balance Pool Token",
+  }),
+  symbol: z.string().openapi({
+    example: "stkABPT",
+  }),
+  updatedAt: z.string().datetime().openapi({
+    example: "2021-02-12T15:19:20.571Z",
+  }),
 });
 
 export const ReserveSchema = z.object({
@@ -67,13 +58,13 @@ export const AaveDailyVolume24hSchema = z.object({
     v1: z.array(ReserveSchema),
     v2: z.array(ReserveSchema),
     stk: z.array(ReserveSchema),
-    asset: z.string(),
-    symbol: z.string(),
-    decimals: z.number(),
-    priceInEth: z.string(),
-    stake: z.number(),
-    redeem: z.number(),
-  }),
+      asset: z.string(),
+      symbol: z.string(),
+      decimals: z.number(),
+      priceInEth: z.string(),
+      stake: z.number(),
+      redeem: z.number(),
+    })
 });
 
 export const AaveRateHistorySchema = z.object({
@@ -86,14 +77,12 @@ export const AaveRateHistorySchema = z.object({
     month: z.number(),
     date: z.number(),
     hours: z.number(),
-  }),
+  })
 });
 
-export const AavePlatformInfoResponseSchema = z.object({
-  pools: z.array(AavePoolSchema),
-  dailyVolume24h: AaveDailyVolume24hSchema.optional(),
-  ratesHistory: z.array(AaveRateHistorySchema).optional(),
-});
+export const AavePoolsResponseSchema = z.array(AavePoolSchema);
+export const AaveDailyVolume24hResponseSchema = AaveDailyVolume24hSchema;
+export const AaveRateHistoryResponseSchema = z.array(AaveRateHistorySchema);
 
 export const ErrorResponseSchema = z.object({
   error: z.string(),
@@ -101,9 +90,11 @@ export const ErrorResponseSchema = z.object({
 
 // export type AavePositionsRequestParams = z.infer<typeof AavePositionsRequestParamsSchema>;
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
-export type Position = z.infer<typeof AavePositionSchema>;
+// export type Position = z.infer<typeof AavePositionSchema>;
 export type Pool = z.infer<typeof AavePoolSchema>;
 export type DailyVolume24h = z.infer<typeof AaveDailyVolume24hSchema>;
-export type AavePlatformInfoResponse = z.infer<
-  typeof AavePlatformInfoResponseSchema
->;
+export type RateHistory = z.infer<typeof AaveRateHistorySchema>;
+
+export type AavePoolsResponseSchema = z.infer<typeof AavePoolsResponseSchema>;
+export type AaveDailyVolume24hResponseSchema = z.infer<typeof AaveDailyVolume24hResponseSchema>;
+export type AaveRateHistoryResponseSchema = z.infer<typeof AaveRateHistoryResponseSchema>;
