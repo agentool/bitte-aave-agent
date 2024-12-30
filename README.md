@@ -26,7 +26,9 @@ Bitte Aave Agent facilitates the development of AI-powered tools for evaluating 
 
 ### Endpoints
 
-- Aave Account Info `GET` `/api/aave/{account}`
+* /api/aave/pools
+* /api/aave/daily-volume-24h
+* /api/aave/rates-history
 
 ### Usage
 

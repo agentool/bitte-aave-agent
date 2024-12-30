@@ -1,5 +1,5 @@
 import { handle } from "hono/vercel";
-import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { DEPLOYMENT_URL } from "vercel-url";
 import {
   AaveDailyVolume24hResponseSchema,
@@ -72,6 +72,39 @@ const getAaveRatesHistoryRoute = createRoute({
     "Get Aave market rate history of a reserve over given time frames",
   method: "get",
   path: "/api/aave/rates-history",
+  parameters: [
+    {
+      "name": "reserveId",
+      "in": "query",
+      "description": "The id of the Aave reserve you want to query. For V2 markets: assetAddress + lendingPoolAddressesProvider. For V3 markets: assetAddress + poolAddressesProvider + chainId.",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+      "example": '0x6b175474e89094c44da98b954eedeac495271d0f0x24a42fd28c976a61df5d00d0599c34c4f90748c8'
+    },
+    {
+      "name": "from",
+      "in": "query",
+      "description": "The date for where you want to start from in unix timestamp",
+      "required": false,
+      "schema": {
+        "type": "number",
+        "format": "date-time"
+      },
+      "example": 1627317635
+    },
+    {
+      "name": "resolutionInHours",
+      "in": "query",
+      "description": "The resolution in hours. For example, a resolution of 6 means return rates at every 6 hour interval.",
+      "required": false,
+      "schema": {
+        "type": "number"
+      },
+      "example": 6
+    }
+  ],
   responses: {
     200: {
       content: {
