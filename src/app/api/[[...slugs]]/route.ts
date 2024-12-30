@@ -1,15 +1,17 @@
 import { handle } from "hono/vercel";
-import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { DEPLOYMENT_URL } from "vercel-url";
 import {
   AaveDailyVolume24hResponseSchema,
   AavePoolsResponseSchema,
   AaveRateHistoryResponseSchema,
   ErrorResponseSchema,
+  AaveUserPositionsResponseSchema,
 } from "@/lib/schemas";
 import { getAavePools } from '../../../lib/aave-pools';
 import { getAaveDailyVolume24h } from '../../../lib/aave-daily-volume-24h';
 import { getAaveRatesHistory } from '../../../lib/aave-rates-history';
+import { getAaveUserPositions } from '../../../lib/aave-user-positions';
 
 const app = new OpenAPIHono();
 
@@ -72,6 +74,39 @@ const getAaveRatesHistoryRoute = createRoute({
     "Get Aave market rate history of a reserve over given time frames",
   method: "get",
   path: "/api/aave/rates-history",
+  parameters: [
+    {
+      "name": "reserveId",
+      "in": "query",
+      "description": "The id of the Aave reserve you want to query. For V2 markets: assetAddress + lendingPoolAddressesProvider. For V3 markets: assetAddress + poolAddressesProvider + chainId.",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+      "example": '0x6b175474e89094c44da98b954eedeac495271d0f0x24a42fd28c976a61df5d00d0599c34c4f90748c8'
+    },
+    {
+      "name": "from",
+      "in": "query",
+      "description": "The date for where you want to start from in unix timestamp",
+      "required": false,
+      "schema": {
+        "type": "number",
+        "format": "date-time"
+      },
+      "example": 1627317635
+    },
+    {
+      "name": "resolutionInHours",
+      "in": "query",
+      "description": "The resolution in hours. For example, a resolution of 6 means return rates at every 6 hour interval.",
+      "required": false,
+      "schema": {
+        "type": "number"
+      },
+      "example": 6
+    }
+  ],
   responses: {
     200: {
       content: {
@@ -80,6 +115,43 @@ const getAaveRatesHistoryRoute = createRoute({
         },
       },
       description: "Market rate history of a reserve",
+    },
+    400: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Bad request",
+    },
+  },
+});
+
+const getAaveUserPositionsRoute = createRoute({
+  operationId: "get-aave-user-positions",
+  description:
+    "Get Aave user positions",
+  method: "get",
+  path: "/api/aave/user-positions",
+  parameters: [
+    {
+      "name": "safeAddress",
+      "in": "query",
+      "description": "The wallet id of the connected user",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+    }
+  ],
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: AaveUserPositionsResponseSchema,
+        },
+      },
+      description: "User positions in Aave protocol",
     },
     400: {
       content: {
@@ -103,8 +175,15 @@ app.openapi(getAaveDailyVolume24hRoute, async (c) => {
 });
 
 app.openapi(getAaveRatesHistoryRoute, async (c) => {
-  const ratesHistory = await getAaveRatesHistory();
+  const { reserveId, from, resolutionInHours } = c.req.query();
+  const ratesHistory = await getAaveRatesHistory(reserveId, +from, +resolutionInHours);
   return c.json(ratesHistory, 200);
+});
+
+app.openapi(getAaveUserPositionsRoute, async (c) => {
+  const { safeAddress } = c.req.query();
+  const userPositions = await getAaveUserPositions(safeAddress);
+  return c.json(userPositions, 200);
 });
 
 const key = JSON.parse(process.env.BITTE_KEY || "{}");
