@@ -136,7 +136,8 @@ app.openapi(getAaveDailyVolume24hRoute, async (c) => {
 });
 
 app.openapi(getAaveRatesHistoryRoute, async (c) => {
-  const ratesHistory = await getAaveRatesHistory();
+  const { reserveId, from, resolutionInHours } = c.req.query();
+  const ratesHistory = await getAaveRatesHistory(reserveId, +from, +resolutionInHours);
   return c.json(ratesHistory, 200);
 });
 
