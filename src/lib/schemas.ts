@@ -97,6 +97,17 @@ export const UserPositionSchema = z.object({
   }),
 });
 
+// TODO
+export const AaveDepositSchema = z.object({
+  transaction: z.object({
+    chainId: z.number(),
+    metaTransactions: z.array(z.object({
+      token: z.string(),
+      to: z.string(),
+      amount: z.string(),
+    })),
+  }),
+});
 
 export const ErrorResponseSchema = z.object({
   error: z.string(),
@@ -106,6 +117,7 @@ export const AavePoolsResponseSchema = z.array(AavePoolSchema);
 export const AaveDailyVolume24hResponseSchema = AaveDailyVolume24hSchema;
 export const AaveRateHistoryResponseSchema = z.array(AaveRateHistorySchema);
 export const AaveUserPositionsResponseSchema = z.array(UserPositionSchema);
+export const AaveDepositResponseSchema = AaveDepositSchema;
 
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
 export type Pool = z.infer<typeof AavePoolSchema>;
@@ -117,3 +129,4 @@ export type AavePoolsResponseSchema = z.infer<typeof AavePoolsResponseSchema>;
 export type AaveDailyVolume24hResponseSchema = z.infer<typeof AaveDailyVolume24hResponseSchema>;
 export type AaveRateHistoryResponseSchema = z.infer<typeof AaveRateHistoryResponseSchema>;
 export type AaveUserPositionsResponseSchema = z.infer<typeof AaveUserPositionsResponseSchema>;
+export type AaveDepositResponseSchema = z.infer<typeof AaveDepositResponseSchema>;
