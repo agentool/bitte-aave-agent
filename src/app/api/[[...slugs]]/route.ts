@@ -7,11 +7,13 @@ import {
   AaveRateHistoryResponseSchema,
   ErrorResponseSchema,
   AaveUserPositionsResponseSchema,
+  AaveDepositResponseSchema,
 } from "@/lib/schemas";
 import { getAavePools } from '../../../lib/aave-pools';
 import { getAaveDailyVolume24h } from '../../../lib/aave-daily-volume-24h';
 import { getAaveRatesHistory } from '../../../lib/aave-rates-history';
 import { getAaveUserPositions } from '../../../lib/aave-user-positions';
+import { postAaveDeposit } from '../../../lib/aave-deposit';
 
 const app = new OpenAPIHono();
 
@@ -164,6 +166,61 @@ const getAaveUserPositionsRoute = createRoute({
   },
 });
 
+const postAaveDepositRoute = createRoute({
+  operationId: "post-aave-deposit",
+  description:
+    "Create a deposit transaction on aave protocol",
+  method: "post",
+  path: "/api/aave/deposit",
+  parameters: [
+    {
+      "name": "safeAddress",
+      "in": "query",
+      "description": "The wallet id of the connected user",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+    },
+    {
+      "name": "token",
+      "in": "query",
+      "description": "The desired token to deposit",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+    },
+    {
+      "name": "amount",
+      "in": "query",
+      "description": "The desired amount to deposit",
+      "required": true,
+      "schema": {
+        "type": "number"
+      },
+    }
+  ],
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: AaveDepositResponseSchema,
+        },
+      },
+      description: "User positions in Aave protocol",
+    },
+    400: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Bad request",
+    },
+  },
+});
+
 app.openapi(getAavePoolsRoute, async (c) => {
   const aavePools = await getAavePools();
   return c.json(aavePools, 200);
@@ -184,6 +241,12 @@ app.openapi(getAaveUserPositionsRoute, async (c) => {
   const { safeAddress } = c.req.query();
   const userPositions = await getAaveUserPositions(safeAddress);
   return c.json(userPositions, 200);
+});
+
+app.openapi(postAaveDepositRoute, async (c) => {
+  const { safeAddress, token, amount } = c.req.query();
+  const userDeposit = await postAaveDeposit(+amount, token);
+  return c.json(userDeposit, 200);
 });
 
 const key = JSON.parse(process.env.BITTE_KEY || "{}");
