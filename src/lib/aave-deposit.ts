@@ -8,16 +8,6 @@ import {
 import { AaveDepositResponseSchema } from './schemas';
 import { getTokenMap } from './utils';
 
-const getTokenAddress = async (token: string): Promise<string> => {
-  const response = await fetch(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${token}`);
-  const data = await response.json();
-
-  if (!data?.contract_address) {
-    throw new Error("Failed to fetch asset address");
-  }
-
-  return data?.contract_address;
-}
 
 const getLendingPoolAddress = async (): Promise<string> => {
   const response = await fetch('https://aave-api-v2.aave.com/data/pools');
@@ -42,23 +32,30 @@ export const postAaveDeposit = async (amount: number, token: string): Promise<an
       await getTokenMap(),
     );
 
-    console.log("erc20/ tokenDetails", chainId, symbol, decimals, address);
-    
-    return NextResponse.json(
-      {
-        transaction: signRequestFor({
-          chainId,
-          metaTransactions: [
-            erc20Transfer({
-              token: address,
-              to: lendingPoolAddress as Address,
-              amount: parseUnits(amount.toString(), decimals),
-            }),
-          ],
+    console.log("erc20/ tokenDetails", amount, chainId, symbol, decimals, address);
+
+    const transaction = signRequestFor({
+      chainId,
+      metaTransactions: [
+        erc20Transfer({
+          token: address,
+          to: lendingPoolAddress as Address,
+          amount: parseUnits(amount.toString(), decimals),
         }),
+      ],
+    });
+
+    console.log("transaction", transaction);
+
+    const response = NextResponse.json(
+      {
+        transaction
       },
       { status: 200 },
-    );
+    )
+    console.log("response", response);
+    
+    return transaction;
   } catch (error: unknown) {
     console.error("Error posting aave deposit:", error);
     return NextResponse.json({ 
